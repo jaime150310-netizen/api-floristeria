@@ -3,6 +3,10 @@ const mysql = require('mysql');
 const fs = require('fs');
 const path = require('path');
 
+const ca = process.env.DB_CA
+    ? process.env.DB_CA.replace(/\\n/g, '\n')
+    : fs.readFileSync(path.join(__dirname, '../../ca.pem'));
+
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -11,7 +15,7 @@ const db = mysql.createConnection({
     port: process.env.DB_PORT,
     dateStrings: true,
     ssl: {
-        ca: fs.readFileSync(path.join(__dirname, '../../ca.pem'))
+        ca: ca
     }
 });
 
